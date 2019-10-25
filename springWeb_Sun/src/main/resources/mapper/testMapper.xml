@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.web.dao.TestMapper">
+	<insert id="testInsert" parameterType="TestVO"> <!-- parameterType에는 데이터 타입!  -->
+		insert into test values (#{a}, #{b}) 
+		<!-- interface의 메소드와 이름이 같다 
+		역할: xml과 java를 연결해 주는 역할
+		#{}안에 들어가 있는 값은 TestVO에 있는 변수명과 동일해야한디. 
+		**주의  ;은 붙이지 말것! ERROR발생!!-->
+	</insert>
+</mapper>

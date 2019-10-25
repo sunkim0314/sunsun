@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="logImpl" value="LOG4J"/>
+	</settings>
+
+	<typeAliases>
+		<typeAlias type="com.test.web.vo.TestVO" alias="TestVO" />
+		<typeAlias type="com.test.web.vo.MemberVO" alias="MemberVO" />
+		<typeAlias type="com.test.web.vo.GuestbookVO" alias="GuestbookVO" />
+		<typeAlias type="com.test.web.vo.BoardVO" alias="BoardVO" />
+		<typeAlias type="com.test.web.vo.ReplyVO" alias="ReplyVO" />
+	</typeAliases>
+	<mappers>
+		<mapper resource="mapper/testMapper.xml" />
+		<mapper resource="mapper/memberMapper.xml" />
+		<mapper resource="mapper/guestbookMapper.xml" />
+		<mapper resource="mapper/boardMapper.xml" />
+		<mapper resource="mapper/replyMapper.xml" />
+	</mappers>
+</configuration>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.web.dao.BoardMapper">
+	<!-- 페이징 -->
+	<select id="getTotal" parameterType="map" resultType="int"> <!-- resultType은 반드시 int로!!!!!!!!!! -->
+		SELECT COUNT(*)
+		FROM board
+		WHERE ${searchItem} LIKE '%'||#{searchKeyword}||'%'
+	</select>
+
+<!-- 	<select id="boardList" parameterType="map" resultType="BoardVO">
+		SELECT *
+		FROM board
+		WHERE ${searchItem} LIKE '%'||#{searchKeyword}||'%'
+		ORDER BY boardnum DESC, inputdate DESC
+	</select> -->
+	<select id="boardList" parameterType="map" resultType="BoardVO">
+		SELECT *
+		FROM board
+		WHERE <choose>
+				<when test ="searchItem == 'title'"> title</when>
+				<when test ="searchItem == 'uesrid'"> userid</when>
+				<when test ="searchItem == 'content'"> content</when>
+			</choose>
+			LIKE '%'||#{searchKeyword}||'%'
+		ORDER BY boardnum DESC, inputdate DESC 
+	</select>
+	<!-- 특정게시물 보기 -->
+	<select id="boardRead" parameterType="int" resultType="BoardVO">
+		SELECT *
+		FROM board
+		WHERE boardNum = #{boardNum}
+	</select>
+	<!-- 조회수 중가 로직 -->
+	<update id="countHit">
+		UPDATE 	board
+		SET 	hit = hit+1
+		WHERE	boardnum = #{boardNum}
+	</update>
+	<!-- 게시물 삭제 -->
+	<delete id="boardDelete">
+		DELETE board
+		WHERE boardNum = #{boardNum}
+		AND userid = #{userid} <!-- vo가 가지고있는 userid와 동일! -->
+	</delete>
+	<!-- 게시물 등록 -->
+	<insert id="boardWrite" parameterType="BoardVO">
+		INSERT INTO board(boardNum,userid,title,content,originalFilename,savedFilename)
+		VALUES(
+			board_seq.NEXTVAL,#{userid},#{title},#{content}
+			<choose> <!-- 게시글에 첨부파일을 넣었는가 안넣었는가 분리해서 sql문 작성 -->
+				<when test="originalFilename != null and savedFilename != null">
+					,#{originalFilename},#{savedFilename}
+				</when>
+				<otherwise>
+					,null,null
+				</otherwise>
+			</choose>
+		)
+	</insert>
+	<!-- 게시물 수정 -->
+	<update id="boardUpdate" parameterType="BoardVO">
+		UPDATE board
+		SET title = #{title}, content = #{content}
+		<if test="originalFilename != null and savedFilename != null">
+			, originalFilename = #{originalFilename}
+			, savedFilename = #{savedFilename}
+		</if>		
+		WHERE boardnum = #{boardNum}
+		AND userid = #{userid}
+	</update>
+</mapper>
+

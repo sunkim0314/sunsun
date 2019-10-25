@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.web.dao.MemberMapper">
+	<insert id="memberInsert" parameterType="MemberVO"> 
+	<!-- MemberMapper의 메서드명과 id같은 동일하게!parameterType에는 데이터 타입!  -->
+	 <!-- VO필드변수명과 동일하게 작성하기 -->
+		insert into member values ( #{userid}, #{userpwd}, #{username}, #{phone}, #{address}, #{hobby}, #{marital}, #{joinpath} ) 
+		<!-- interface의 메소드와 이름이 같다 
+		역할: xml과 java를 연결해 주는 역할
+		#{}안에 들어가 있는 값은 TestVO에 있는 변수명과 동일해야한디. 
+		**주의  ;은 붙이지 말것! ERROR발생!!-->
+
+<!-- 		CREATE TABLE member (
+	userid		VARCHAR2(100) PRIMARY KEY,
+	userpwd		VARCHAR2(100) NOT NULL,
+	username	VARCHAR2(100) NOT NULL,
+	phone		VARCHAR2(20),
+	address		VARCHAR2(2000),
+	hobby		VARCHAR2(1000),
+	marital		VARCHAR2(20),
+	joinpath	VARCHAR2(2000)
+);		 -->
+	</insert>
+	
+	<select id="memberLogin" parameterType="MemberVO" resultType="MemberVO"> <!-- 존재하였나 존재하지 않았나 -->
+		select userid, userpwd from member where userid = #{userid} AND userpwd = #{userpwd}
+	</select>
+	<!-- 
+		<select id="login" parameterType="MemberVO" resultType="MemberVO"> 
+		select * 
+		from member 
+		where userid = #{userid} 
+		AND userpwd = #{userpwd}
+	</select>
+	 -->
+</mapper>

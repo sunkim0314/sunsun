@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.web.dao.GuestbookMapper">
+
+	<select id="guestbookList" parameterType="map" resultType="GuestbookVO">
+		SELECT *
+		FROM guestbook
+		WHERE ${searchItem} LIKE '%'||#{searchKeyword}||'%' <!-- #의 기능: 데이터타입에 자동으로 맞춰준다  cf) $: 그대로 들어간다. -->
+		ORDER BY seq DESC
+	</select>
+	
+	<select id="read" parameterType="GuestbookVO" resultType="GuestbookVO">
+		SELECT *
+		FROM guestbook
+		WHERE seq = #{seq}
+	</select>
+	
+	<insert id="write" parameterType="GuestbookVO">
+		INSERT INTO guestbook VALUES (
+			guestbook_seq.nextval,
+			#{name},
+			#{pwd},
+			#{content},
+			sysdate
+			<choose>
+				<when test="originalFilename != null and savedFilename != null">
+					,#{originalFilename}, #{savedFilename}
+				</when>
+				<otherwise>
+					,null,null
+				</otherwise>
+			</choose>
+		)
+	</insert>
+	
+	<delete id="delete" parameterType="GuestbookVO" >
+		DELETE FROM guestbook
+		WHERE pwd = #{pwd}
+		AND seq = #{seq}
+	</delete>
+	
+</mapper>
+
